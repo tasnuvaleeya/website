@@ -2,8 +2,29 @@
 <h1>{{ album.album_title }}</h1>
 <h3>{{ album.artist }}</h3>
 
-<ul>
+<!--<ul>-->
+<!--{% for song in album.song_set.all %}-->
+<!--<li>{{ song.song_title }} - {{ song.song_type }}</li>-->
+<!--{% endfor %}-->
+<!--</ul>-->
+
+{% if error_message %}
+
+<p>{{ error_message }}</p>
+{% endif %}
+
+<form method="post" action="{% url 'music:detail' album.id%}">
+    {% csrf_token %}
     {% for song in album.song_set.all %}
-    <li>{{ song.song_title }} - {{ song.song_type }}</li>
+    <input type="radio" id="song{{ forloop.counter}}" name="song" value="{{ song.id }}"/>
+    <label for="song{{ forloop.counter}}">
+        {{ song.song_title }}
+        {% if song.is_favourite %}
+        <img src="https://www.shutterstock.com/image-vector/star-icon-vector-line-clasic-rank-429574270?src=w-10U5yud-t4bZsojo0tIQ-1-2"/>
+        {% endif %}
+    </label><br/>
+
     {% endfor %}
-</ul>
+    <input type="submit" value="Favourite"/>
+
+</form>
